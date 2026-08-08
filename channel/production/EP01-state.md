@@ -54,13 +54,47 @@ Script: `channel/scripts/EP01-narration-450.txt`
 | 31 | CARD_TERMINAL (1:1) | `18ec13d3-837a-445e-b649-c21a08c5e863` |
 | 32 | COFFEE_CUP (1:1) | `64fea2cb-acbe-405d-9f68-b7d0ce82741b` |
 
-## REMAINING
+## FRAME ARCHITECTURE (locked)
 
-1. **Frames** — assembler floor is `ceil(376.86 / 1.5)` = **252**; target ~310.
-   Roughly ⅓ KIND-A (new framing, composed from location → character → prop refs) and
-   ⅔ KIND-B (edit of the previous frame's job_id as the ONLY ref, one visible change,
-   never more than 2 in a row). `resolution: "1k"`, `aspect_ratio: "16:9"`.
-   Name each `frameNNN.png` by **timeline number in spoken order**, never finish order.
+**356 frames**, durations summing to 376.87s, max hold 1.5s — built by grouping Whisper
+captions to ≤1.45s and splitting anything longer. Regenerate identically by re-running
+Whisper on the joined narration and applying that same grouping.
+
+**Pattern:** frame `n` is KIND-A when `(n-1) % 3 == 0`, otherwise KIND-B editing `n-1`.
+That gives **119 KIND-A** / **237 KIND-B**, never more than 2 edits in a row and never 2
+new framings in a row — both caps the format enforces.
+
+**This splits into THREE PARALLEL WAVES** rather than 237 sequential chained calls:
+
+| Wave | Frames | Depends on | Count |
+|---|---|---|---|
+| A | `(n-1)%3==0` | assets only — fully parallel | 119 |
+| B1 | `(n-1)%3==1` | its own A frame (different A each) — parallel | 119 |
+| B2 | `(n-1)%3==2` | its own B1 frame — parallel | 118 |
+
+Submit **8 per call** (Plus concurrency cap), `resolution:"1k"`, `aspect_ratio:"16:9"`.
+KIND-B passes the predecessor's job_id as the ONLY ref — no asset sheets, no location, no
+props, or the model rebuilds the scene instead of editing it.
+
+Name each `frameNNN.png` by **timeline number in spoken order**, never finish order.
+
+### Scene map — 42 scenes, frame ranges
+
+`1-12 CAFE · 13-16 LEDGER · 17-25 CAFE · 26-32 LEDGER · 33-41 RAILS · 42-47 RAILS ·
+48-55 BANK · 56-61 BANK · 62-71 BANK · 72-78 TOWER · 79-84 RAILS · 85-91 HOME ·
+92-99 HOME · 100-108 BANK · 109-115 LEDGER · 116-124 CAFE · 125-127 CAFE · 128-138 FARM ·
+139-143 FARM · 144-153 PORT · 154-161 CAFE · 162-171 LANDLORD · 172-182 LEDGER ·
+183-190 CAFE · 191-199 LEDGER · 200-207 CAFE · 208-214 LEDGER · 215-226 CAFE ·
+227-233 CAFE · 234-246 LEDGER · 247-252 LEDGER · 253-263 BANK · 264-267 BANK ·
+268-275 HOME · 276-282 HOME · 283-293 TOWER · 294-304 HOME · 305-311 BANK ·
+312-322 HOME · 323-334 CAFE · 335-345 HOME · 346-356 LEDGER`
+
+### Wave A progress
+
+Batch 1 done — frames 1,4,7,10,13,16,19,22:
+`48e876da…` `a1a6e0fb…` `c0252733…` `c85a42e2…` `d4f318f5…` `faffd1d6…` `7a8a7953…` `09f500f0…`
+
+## REMAINING
 2. **Assemble** — `assemble_slides.sh --audio narration.wav --blocks N`, manifest is
    `frameNNN.png <seconds>` ascending, durations `start(n+1) - start(n)` from Whisper.
 3. **Subtitles** — subtitles skill, `clean` look.
