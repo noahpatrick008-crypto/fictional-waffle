@@ -151,7 +151,25 @@ All **119 KIND-A frames** rendered on palette v2 and recorded in `EP01-frame-led
 (121 rows total: 119 A + frames 2 and 3 from the B pilot). Verified: no gaps, no duplicate
 frame numbers, no duplicate job ids. The v1 renders of frames 1–22 are discarded.
 
-Wave A cost 1.5 credits per frame at `resolution:"1k"` — no failures, no retries needed.
+**Green-fill QA pass (all 79 new frames measured).** Sampled every frame at 160x90 and
+counted pixels with `sat>=0.40, val>=0.18` in hue 70–175 (green) and 335–20 (red). Four
+frames — **172, 178, 181, 238** — had the money-paper itself rendered emerald
+(20.2% / 12.8% / 12.2% / 8.1% of frame). The 5th-worst was 0.6%, so this was a bounded
+defect, not palette drift: 75/79 were clean. All four are LEDGER frames whose beats name
+paper strips or banknotes.
+
+Fixed by regenerating those four with one clause appended after the palette lock:
+
+> Every paper strip, paper section and banknote in this frame is plain cream or off-white
+> paper with near-black ink — never green, never any saturated fill.
+
+Re-measured after: all four at **0.0% green**, cream 97–99.5%, top fill cream. The ledger
+now carries the corrected job ids; the green renders are discarded. **Add this clause to
+any future KIND-A prompt whose beat names a strip, section or banknote** — the base
+palette lock alone does not reliably hold the money-paper cream.
+
+Wave A cost 1.5 credits per frame at `resolution:"1k"` — no failures, no retries needed
+beyond the four green reruns above (6 credits).
 Render latency drifted from ~45s to ~4min per batch of 8 over the run; batches sit in
 `queued`/`in_progress` far longer than the 15s `jobs_wait` ceiling, so wait with a
 background `sleep` (~200s) between polls rather than looping `jobs_wait`.
