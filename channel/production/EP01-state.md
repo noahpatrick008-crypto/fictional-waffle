@@ -11,9 +11,49 @@ Aspect **16:9** · Voice **Cillian** `d8ba9f14-8a24-44db-932b-99e16c45bd32` / `p
 > flat color fills with NO shading, NO gradients, NO texture, deadpan minimalist design,
 > plain flat solid-color backgrounds.
 
-PALETTE LOCK: warm cream paper background, near-black ink outlines, one emerald green
-accent and one red accent — no other colors, no gradients, no painted or textured
-backgrounds.
+PALETTE LOCK (v2 — the ONLY one to use; v1 is dead, see below):
+
+> warm cream paper and near-black ink dominate the frame; large surfaces are cream,
+> off-white, muted warm grey and soft tan. Emerald green and red appear ONLY as small
+> sparing accents on one or two meaningful details, never as large fills. No other
+> saturated colors, no gradients, no painted or textured backgrounds.
+
+Paste the style formula AND this palette lock, byte-identical, into every KIND-A prompt.
+KIND-B prompts carry neither — they use only the edit sentence in §RESUME.
+
+---
+
+# RESUME HERE
+
+**Next action: wave A, frames 121 onward.** Read `EP01-waveA-beats.tsv`, take the next 8
+rows, submit them as one `generate_image_batch`, wait, append the returned job ids to
+`EP01-frame-ledger.tsv`, repeat. 79 wave-A frames remain, then 235 KIND-B frames.
+
+**KIND-A prompt shape** (`seedream_v5_pro`, `aspect_ratio:"16:9"`, `resolution:"1k"`,
+`medias` = location → characters → props, all role `image_references`):
+
+```
+{SHOT}: {beat}. Staged fresh as a full dressed scene, matching the reference images for
+location, character identity, colors and background. In THIS EXACT style: {STYLE FORMULA}
+{PALETTE LOCK v2} No text, no watermark.
+```
+
+**KIND-B prompt shape** — the predecessor frame's job_id as the ONE and ONLY `medias`
+entry. No asset sheets, no location, no props, no style formula, no palette lock; adding
+any of them makes the model rebuild the scene instead of editing it:
+
+```
+Take the reference image and keep it EXACTLY: same composition, same crop, same camera,
+same character, same colors, same background, same style. Change ONLY: {one visible
+change}. Do not redraw or re-stage anything else.
+```
+
+Wave B1 = every frame where `(n-1)%3==1`, editing `n-1` (all parallel, different bases).
+Wave B2 = every frame where `(n-1)%3==2`, editing `n-1`. Frames 2 and 3 are already done
+and confirm the mechanism works — match their wording.
+
+Each KIND-B change must be **visible at a glance**: an arm moves, the head turns, an
+object enters or leaves. A raised eyebrow is invisible in one second of screen time.
 
 ## DONE
 
@@ -108,9 +148,18 @@ Batch 1 (frames 1,4,7,10,13,16,19,22) regenerated on palette v2:
 The v1 renders of these eight are discarded.
 
 ## REMAINING
-2. **Assemble** — `assemble_slides.sh --audio narration.wav --blocks N`, manifest is
-   `frameNNN.png <seconds>` ascending, durations `start(n+1) - start(n)` from Whisper.
-3. **Subtitles** — subtitles skill, `clean` look.
+
+1. **Frames** — 79 wave-A (beats already authored in `EP01-waveA-beats.tsv`), then 235
+   KIND-B edits. Append every job id to `EP01-frame-ledger.tsv` as it completes.
+2. **Assemble** — in `sandbox_exec`: re-download the 4 narration chunks, concat to
+   `narration.wav`, re-run Whisper, regroup to the same 356 segments, download every frame
+   from the ledger as `frameNNN.png` **by ledger number, never by job finish order**, then
+   `assemble_slides.sh --audio narration.wav --blocks 356` with a manifest of
+   `frameNNN.png <seconds>` ascending, durations `start(n+1) - start(n)`.
+   Before assembling, print the ledger as `NNN → the beat's first five words` and read it
+   top to bottom, then spot-check frames at ~25% / 50% / 75% against what is being said at
+   that timestamp.
+3. **Subtitles** — subtitles skill, `clean` look. Never hand-time or hand-burn.
 4. **Topaz upscale** → deliver one `final.mp4`.
 
 ## Costs measured (correcting earlier estimates)
@@ -122,8 +171,9 @@ The v1 renders of these eight are discarded.
 | `seed_audio` per chunk | ~0.1 |
 | `gemini_omni` 10s block | 30 |
 
-Spent so far: **87** (style key + 17 assets + 4 narration chunks). Balance **984**.
-Frames at 1k ≈ 380–465. Projected total ≈ 500, leaving ~480.
+Spent so far: **~300** (two style keys, 34 assets across two palette passes, 4 narration
+chunks, 42 frames). Balance **~770**. The 314 remaining frames cost ~470 at 1k, leaving
+~300 of headroom for retries and the upscale.
 
 ## Gotchas hit
 
