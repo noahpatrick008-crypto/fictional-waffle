@@ -25,9 +25,13 @@ KIND-B prompts carry neither — they use only the edit sentence in §RESUME.
 
 # RESUME HERE
 
-**Next action: wave A, frames 121 onward.** Read `EP01-waveA-beats.tsv`, take the next 8
-rows, submit them as one `generate_image_batch`, wait, append the returned job ids to
-`EP01-frame-ledger.tsv`, repeat. 79 wave-A frames remain, then 235 KIND-B frames.
+**Wave A is COMPLETE — all 119 KIND-A frames are in `EP01-frame-ledger.tsv`.**
+
+**Next action: wave B1** — every frame where `(n-1)%3==1`, each editing its own `n-1`.
+Frames 2 and 5 … 356: 118 remain (frame 2 is already done). Look up the predecessor's
+job id in the ledger, pass it as the ONE and ONLY `medias` entry, submit 8 per
+`generate_image_batch`, wait, append the returned ids to the ledger as kind `B1`, repeat.
+Then wave B2 (`(n-1)%3==2`, editing `n-1`, 117 remain — frame 3 is already done).
 
 **KIND-A prompt shape** (`seedream_v5_pro`, `aspect_ratio:"16:9"`, `resolution:"1k"`,
 `medias` = location → characters → props, all role `image_references`):
@@ -141,16 +145,21 @@ Name each `frameNNN.png` by **timeline number in spoken order**, never finish or
 268-275 HOME · 276-282 HOME · 283-293 TOWER · 294-304 HOME · 305-311 BANK ·
 312-322 HOME · 323-334 CAFE · 335-345 HOME · 346-356 LEDGER`
 
-### Wave A progress
+### Wave A progress — DONE
 
-Batch 1 (frames 1,4,7,10,13,16,19,22) regenerated on palette v2:
-`9c29a182…` `8d46285f…` `f706d013…` `1c197494…` `5fcfd152…` `9e7d4cd0…` `4a47a310…` `e07eab35…`
-The v1 renders of these eight are discarded.
+All **119 KIND-A frames** rendered on palette v2 and recorded in `EP01-frame-ledger.tsv`
+(121 rows total: 119 A + frames 2 and 3 from the B pilot). Verified: no gaps, no duplicate
+frame numbers, no duplicate job ids. The v1 renders of frames 1–22 are discarded.
+
+Wave A cost 1.5 credits per frame at `resolution:"1k"` — no failures, no retries needed.
+Render latency drifted from ~45s to ~4min per batch of 8 over the run; batches sit in
+`queued`/`in_progress` far longer than the 15s `jobs_wait` ceiling, so wait with a
+background `sleep` (~200s) between polls rather than looping `jobs_wait`.
 
 ## REMAINING
 
-1. **Frames** — 79 wave-A (beats already authored in `EP01-waveA-beats.tsv`), then 235
-   KIND-B edits. Append every job id to `EP01-frame-ledger.tsv` as it completes.
+1. **Frames** — 235 KIND-B edits (118 in wave B1, 117 in wave B2). Append every job id to
+   `EP01-frame-ledger.tsv` as it completes.
 2. **Assemble** — in `sandbox_exec`: re-download the 4 narration chunks, concat to
    `narration.wav`, re-run Whisper, regroup to the same 356 segments, download every frame
    from the ledger as `frameNNN.png` **by ledger number, never by job finish order**, then
@@ -171,9 +180,9 @@ The v1 renders of these eight are discarded.
 | `seed_audio` per chunk | ~0.1 |
 | `gemini_omni` 10s block | 30 |
 
-Spent so far: **~300** (two style keys, 34 assets across two palette passes, 4 narration
-chunks, 42 frames). Balance **~770**. The 314 remaining frames cost ~470 at 1k, leaving
-~300 of headroom for retries and the upscale.
+Spent so far: **~420** (two style keys, 34 assets across two palette passes, 4 narration
+chunks, 121 frames). Balance **741.3** measured after wave A. The 235 remaining KIND-B
+frames cost ~353 at 1k, leaving ~390 of headroom for retries and the upscale.
 
 ## Gotchas hit
 
