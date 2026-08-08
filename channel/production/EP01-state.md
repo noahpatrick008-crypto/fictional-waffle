@@ -17,7 +17,41 @@ backgrounds.
 
 ## DONE
 
-**Style key** `029446ad-ad3e-4ae8-b875-433940306d89`
+**Style key** `e9d4a449-02e7-4fed-873a-8c36d7a49e1a` (palette v2 — supersedes `029446ad…`)
+
+**PALETTE LOCK v2** — the v1 lock said "one emerald green accent and one red accent",
+which the model read as *use green and red everywhere*. Corrected to:
+
+> warm cream paper and near-black ink dominate the frame; large surfaces are cream,
+> off-white, muted warm grey and soft tan. Emerald green and red appear ONLY as small
+> sparing accents on one or two meaningful details, never as large fills. No other
+> saturated colors, no gradients, no painted or textured backgrounds.
+
+Also removed green baked into individual asset prompts (barista's apron → warm grey,
+coffee shrubs → muted sage), since those forced green into whole locations regardless
+of the palette line.
+
+**Asset roster v2 (17)** — all regenerated against the v2 style key
+
+| idx | asset | job id |
+|---|---|---|
+| 10 | MARV (2:3) | `b05fadc6-2c33-4ff0-8869-6dbcd80cd82c` |
+| 11 | BARISTA (2:3) | `2835193d-2b54-40f5-90fa-9ded780901d0` |
+| 12 | SUIT (2:3) | `64880cdb-285f-481a-b3c7-b80f83853595` |
+| 13 | FARMER (2:3) | `e3688e03-f642-4e25-a573-20302e6486d1` |
+| 14 | LANDLORD (2:3) | `b3e753f7-af4d-407d-bed3-ac2985971c1a` |
+| 20 | CAFE_COUNTER | `df835f15-4fd7-4a95-a761-576c5c4d4fda` |
+| 21 | LEDGER_VOID | `3c96eb3d-622e-46b6-a4da-cef2e584e1bc` |
+| 22 | RAILS | `9c74addc-a567-48bc-a4a5-f3535a5d4f72` |
+| 23 | BANK_LOBBY | `860c79a0-7f49-44a7-9dd5-91217c7e959d` |
+| 24 | NETWORK_TOWER | `07847821-8699-406c-963b-18fd3dec4035` |
+| 25 | COFFEE_FARM | `5763638d-8100-4a30-8fe4-1121d52fb26f` |
+| 26 | PORT | `0c05b4c5-84a8-4d12-a387-5893da8bac2b` |
+| 27 | LANDLORD_OFFICE | `7cb7743d-36e4-4db1-b1db-5d3cfc03e2f0` |
+| 28 | MARV_HOME | `1dc4aeab-0a20-42f4-9626-639fe7617e64` |
+| 30 | THE_TWENTY (1:1) | `258a05bd-1526-4687-b078-fd88417d8f54` |
+| 31 | CARD_TERMINAL (1:1) | `5ca7f8f9-7c45-4e23-8ce6-0867909e2913` |
+| 32 | COFFEE_CUP (1:1) | `3cd3704c-ae7b-4413-9d1e-7cbe55fcfdf0` |
 
 **Narration** — 4 chunks, joined = `narration.wav`, **376.86s (6:17)**, 871 words,
 Whisper gives 392 caption groups (~0.96s each). Delivery cue used verbatim on every chunk:
@@ -31,28 +65,6 @@ Whisper gives 392 caption groups (~0.96s each). Delivery cue used verbatim on ev
 | 4 | `51b71ec6-011c-4a55-aaeb-7396bde82a61` (76.79s) |
 
 Script: `channel/scripts/EP01-narration-450.txt`
-
-**Asset roster (17)** — all `seedream_v5_pro`, style key attached as `image_references`
-
-| idx | asset | job id |
-|---|---|---|
-| 10 | MARV (2:3) | `d4cb674b-dc34-4f48-ad6f-f5a2b16f355b` |
-| 11 | BARISTA (2:3) | `835a2a66-a8ed-4096-9f4c-249ad33ca3df` |
-| 12 | SUIT (2:3) | `bfdc011b-3d1d-410b-80a0-c7374302b1a6` |
-| 13 | FARMER (2:3) | `e7472cff-6319-41e0-8c86-059e53eb0ebd` |
-| 14 | LANDLORD (2:3) | `b1a3db97-a896-4235-94e8-2a6dd08fae2e` |
-| 20 | CAFE_COUNTER | `7918f8ad-da33-4f5b-8934-a37cc6d90ab8` |
-| 21 | LEDGER_VOID | `9caa7143-b099-4f65-9595-9e7d662cd9ca` |
-| 22 | RAILS | `942347eb-04ac-4b5d-8578-8f62d72c35cf` |
-| 23 | BANK_LOBBY | `b4d4ff0e-5ee4-4ce5-9a4a-c857f5c19bbc` |
-| 24 | NETWORK_TOWER | `d5ce481e-187e-40d5-958f-781d3e6c5d92` |
-| 25 | COFFEE_FARM | `84bd5566-2cd8-4381-ae4c-b22de1860b1b` |
-| 26 | PORT | `2c6ed3ea-0585-4ea4-9a67-0525a0744e9b` |
-| 27 | LANDLORD_OFFICE | `e2a02262-0f86-4087-aead-0acdb9548aa0` |
-| 28 | MARV_HOME | `4649c88b-c0c6-484a-8e1e-a8e404c33dd4` |
-| 30 | THE_TWENTY (1:1) | `85f7aed6-638d-4d8e-9c21-05410afad479` |
-| 31 | CARD_TERMINAL (1:1) | `18ec13d3-837a-445e-b649-c21a08c5e863` |
-| 32 | COFFEE_CUP (1:1) | `64fea2cb-acbe-405d-9f68-b7d0ce82741b` |
 
 ## FRAME ARCHITECTURE (locked)
 
@@ -91,8 +103,9 @@ Name each `frameNNN.png` by **timeline number in spoken order**, never finish or
 
 ### Wave A progress
 
-Batch 1 done — frames 1,4,7,10,13,16,19,22:
-`48e876da…` `a1a6e0fb…` `c0252733…` `c85a42e2…` `d4f318f5…` `faffd1d6…` `7a8a7953…` `09f500f0…`
+Batch 1 (frames 1,4,7,10,13,16,19,22) regenerated on palette v2:
+`9c29a182…` `8d46285f…` `f706d013…` `1c197494…` `5fcfd152…` `9e7d4cd0…` `4a47a310…` `e07eab35…`
+The v1 renders of these eight are discarded.
 
 ## REMAINING
 2. **Assemble** — `assemble_slides.sh --audio narration.wav --blocks N`, manifest is
