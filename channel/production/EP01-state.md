@@ -25,15 +25,11 @@ KIND-B prompts carry neither — they use only the edit sentence in §RESUME.
 
 # RESUME HERE
 
-**Waves A and B1 are COMPLETE — 239 frames in `EP01-frame-ledger.tsv`**
-(119 A + 119 B1 + frame 3 from the B pilot). Verified: no gaps, no duplicate frame
-numbers, no duplicate job ids.
+**ALL 356 FRAMES ARE RENDERED.** `EP01-frame-ledger.tsv` carries one job id per frame,
+119 A + 119 B1 + 118 B2, covering 1..356 with no gaps, no duplicate frame numbers, no
+duplicate job ids, and every row's kind matching the `(n-1)%3` pattern.
 
-**Next action: wave B2** — every frame where `(n-1)%3==2`, each editing its own `n-1`
-(a B1 frame). Frames 3 and 6 … 354: **117 remain**, all authored in
-`EP01-waveB2-changes.tsv`. Look up the predecessor's job id in the ledger, pass it as
-the ONE and ONLY `medias` entry, submit 8 per `generate_image_batch`, wait, append the
-returned ids to the ledger as kind `B2`, repeat. That closes the frame set at 356.
+**Next action: assembly** — step 2 under §REMAINING. Nothing further to generate.
 
 **KIND-A prompt shape** (`seedream_v5_pro`, `aspect_ratio:"16:9"`, `resolution:"1k"`,
 `medias` = location → characters → props, all role `image_references`):
@@ -205,10 +201,19 @@ known beats correctly where they exist — frame 97's beat lands exactly on the 
 line. Those 31 changes are phrased additively so a missing element gets introduced
 rather than contradicted. **Spot-check frames 5-95 during the assembly read-through.**
 
+### Wave B2 progress — DONE
+
+All **118 KIND-B2 frames** rendered and recorded; 117 submitted this session in 15
+batches of ≤8, zero failures and zero retries, same 1.5 credits per frame. That closes
+the frame set at 356.
+
+Across both B waves, 235 frames were generated back to back with **no failed job and no
+resubmission** — the edit prompt shape in §RESUME is stable at this batch size. The Plus
+concurrency cap never bit because submissions stayed at 8 in flight.
+
 ## REMAINING
 
-1. **Frames** — 117 KIND-B2 edits, all authored in `EP01-waveB2-changes.tsv`. Append
-   every job id to `EP01-frame-ledger.tsv` as it completes.
+1. **Frames** — none. All 356 are in the ledger.
 2. **Assemble** — in `sandbox_exec`: re-download the 4 narration chunks, concat to
    `narration.wav`, re-run Whisper, regroup to the same 356 segments, download every frame
    from the ledger as `frameNNN.png` **by ledger number, never by job finish order**, then
@@ -229,9 +234,10 @@ rather than contradicted. **Spot-check frames 5-95 during the assembly read-thro
 | `seed_audio` per chunk | ~0.1 |
 | `gemini_omni` 10s block | 30 |
 
-Spent so far: **~597** (two style keys, 34 assets across two palette passes, 4 narration
-chunks, 239 frames). Balance **558.3** measured after wave B1. The 117 remaining B2
-frames cost ~176 at 1k, leaving ~382 of headroom for retries and the upscale.
+Spent so far: **~773** (two style keys, 34 assets across two palette passes, 4 narration
+chunks, 356 frames). Balance **382.8** measured after wave B2 — the whole frame set is
+paid for. What remains is the Topaz upscale plus any reruns the assembly read-through
+turns up.
 chunks, 121 frames). Balance **741.3** measured after wave A. The 235 remaining KIND-B
 frames cost ~353 at 1k, leaving ~390 of headroom for retries and the upscale.
 
