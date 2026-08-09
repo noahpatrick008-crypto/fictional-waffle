@@ -1,0 +1,134 @@
+# Wave B2 — every frame where (n-1)%3==2, each editing its own n-1 (a KIND-B1 frame).
+# frame 3 was rendered in the B pilot and is already in the ledger; 117 rows here.
+#
+# Each change continues the two-beat arc its A frame and B1 frame started, into a third
+# state. `loc` is the location of the base frame, not the nominal scene map — see the
+# header of EP01-waveB1-changes.tsv for why.
+#
+# Same prompt shape as wave B1 (predecessor job_id as the ONE and ONLY medias entry):
+#
+#   Take the reference image and keep it EXACTLY: same composition, same crop, same
+#   camera, same character, same colors, same background, same style. Change ONLY:
+#   {change}. Do not redraw or re-stage anything else.
+#
+# No change here writes letters or numerals — the style formula forbids text, and a
+# B edit that asks for a written number gets one rendered into the frame.
+#
+# frame	base	loc	change
+6	5	CAFE	the larger half has been carried out of frame, leaving only the small half on the counter
+9	8	CAFE	the three SUIT silhouettes have each taken one step forward, now level with the counter
+12	11	CAFE	the three SUIT silhouettes have turned away and are walking off toward the right edge
+15	14	LEDGER	the cut-out corner section has been slid to the far side of the ruled plane, well away from the banknote
+18	17	LEDGER	a short label rule has been drawn from the ring out to the edge of the plane
+21	20	CAFE	the till drawer has been pushed shut again
+24	23	CAFE	a single small scrap has been left behind in the middle of the bare counter
+27	26	CAFE	an arrowhead has been added to the far end of the dotted trail
+30	29	LEDGER	every hand along the trail has closed around a small scrap
+33	32	LEDGER	the sliver has been lifted upright, standing on end
+36	35	RAILS	the three stacked blocks have been separated into a horizontal row
+39	38	RAILS	the clock hand has swept round to a quarter past
+42	41	RAILS	the contact line has been redrawn as a burst of short radiating strokes
+45	44	RAILS	a plus sign has been inked between the two labels
+48	47	RAILS	the card has left the frame entirely and the reader stands alone
+51	50	BANK	the largest block has been tipped over onto its side
+54	53	BANK	the small scrap has been moved across and set down in front of the other two blocks
+57	56	BANK	the nameplate has been enlarged to twice its size
+60	59	BANK	a heavy box has been drawn around the nameplate and its underlines
+63	62	BANK	a padlock has been added to the shutter
+66	65	BANK	the turnstile arm has rotated a quarter turn
+69	68	BANK	a short double-headed arrow has been inked across the distance the stack moved
+72	71	BANK	the lifted scrap has drifted up out of the top of the frame
+75	74	TOWER	a second taut line has been added running from the slab to the right edge
+78	77	TOWER	the meter box has sprouted a small round dial on its face
+81	80	RAILS	the scrap has been split into two smaller pieces at the end of the rail
+84	83	RAILS	the terminal has been turned to face the camera square on
+87	86	HOME	MARV has crossed one noodle leg over the other
+90	89	HOME	the drifting scrap has fallen to halfway down the frame
+93	92	HOME	the halved scrap has come to rest on the low table
+96	95	HOME	the hand has closed around the scrap
+99	98	HOME	MARV has lowered the scrap and is looking past it at the camera
+102	101	BANK	THE SUIT has picked up a large pair of scissors in one hand
+105	104	BANK	the cut-away portion has been folded once in half
+108	107	BANK	THE SUIT has laid the small remainder down on the desk
+111	110	LEDGER	the dotted outline has been filled in with dense hatching
+114	113	LEDGER	the banknote has begun to separate along the cut-lines, thin gaps opening between the sections
+117	116	LEDGER	MARV has raised the scissors open above the banknote
+120	119	CAFE	a second paper tag has been hung beside the first
+123	122	CAFE	THE BARISTA has lifted the lid off the crate
+126	125	CAFE	the lidded cup has been moved to the front edge of the counter
+129	128	CAFE	THE BARISTA has pushed the paper strip away across the counter
+132	131	FARM	THE FARMER has lifted the basket up onto his shoulder
+135	134	FARM	the full basket has been set down on the ground
+138	137	FARM	THE FARMER has let the scrap fall from his fingers
+141	140	FARM	every figure in the queue is now holding out an open hand
+144	143	FARM	the line of silhouettes has closed up into a tight single file
+147	146	PORT	the sack has been lifted off the conveyor onto the dock
+150	149	PORT	every SUIT has turned to face the camera, pinch still in hand
+153	152	PORT	the stack of forms has toppled sideways across the dock
+156	155	CAFE	steam has begun rising from the cup on the counter
+159	158	CAFE	a stream has begun running from the machine down into a cup
+162	161	CAFE	the two strips of tape have been peeled off, leaving the machine bare
+165	164	LANDOFF	THE LANDLORD has put both noodle hands flat on the bare desk
+168	167	LANDOFF	the drawer has been pushed shut and THE LANDLORD has leaned back
+171	170	LANDOFF	a whole fan of paper sections has slid under the door
+174	173	LEDGER	a large multiplication mark has been inked between the two brackets
+177	176	LEDGER	MARV has dropped his pointing arm and turned to face the camera
+180	179	LEDGER	the LANDLORD silhouette has sat down on the large strip
+183	182	LEDGER	the tiny strip has been lifted onto its edge beneath the arrow
+186	185	CAFE	a bucket has been placed under the dripping pipe
+189	188	CAFE	the repair figure has left the frame, leaving the invoice on the machine
+192	191	CAFE	each of the six pieces has been turned face down
+195	194	LEDGER	the one remaining section has been slid to the centre of the plane
+198	197	LEDGER	a second, wider ring has been inked around the first
+201	200	LEDGER	MARV has tipped his palm and the scrap has slid off it
+204	203	CAFE	the coin stack has been swept off the counter edge into an open hand
+207	206	CAFE	the door sign has been turned around in the window
+210	209	LEDGER	a single small square has been inked at the end of the bracket
+213	212	LEDGER	the smallest section has fallen flat again beside the others
+216	215	LEDGER	MARV has crouched down at the end of the diagram
+219	218	CAFE	the dividing line has been rubbed out again
+222	221	CAFE	the rule has been extended past both ends of the menu board
+225	224	CAFE	both figures have stepped back from the counter
+228	227	CAFE	both figures have walked off toward opposite edges of the frame
+231	230	CAFE	THE BARISTA has folded both arms and is facing the menu board
+234	233	CAFE	an arrow has been drawn from the boxed mark out to the edge of the board
+237	236	LEDGER	both labels have been enlarged to twice their size
+240	239	LEDGER	the two cut-away pieces have been stacked one on top of the other
+243	242	LEDGER	a small tick has been inked beside the note with the scrap and a cross beside the bare one
+246	245	LEDGER	the fist has been lowered out of the bottom of the frame
+249	248	LEDGER	a second arrow has been added running back the other way, thin and short
+252	251	LEDGER	the arrows have been redrawn converging on a single point at the top right
+255	254	BANK	the open vault is now packed full of paper sections
+258	257	BANK	a second group of tally marks has been circled beside the first
+261	260	BANK	the fanned sheets have been swept back into a single neat pile
+264	263	BANK	the single thick arrow has passed through the vault door and out of sight
+267	266	BANK	the spilled scraps have all arrived inside the large house's doorway
+270	269	HOME	the smallest house at the left end has shrunk to half its height
+273	272	HOME	every arrow has been redrawn as a solid black band
+276	275	HOME	the scrap has travelled halfway up the slope toward the large end
+279	278	HOME	the figure has turned away from the camera, shoulders dropped
+282	281	HOME	the spilled scraps have piled up on the ground beneath the pocket
+285	284	TOWER	the seam has opened into a narrow gap
+288	287	TOWER	every chair in the room has been pulled out from the desk
+291	290	TOWER	a small round indicator lamp beside the switch has come on
+294	293	TOWER	MARV has turned his back on the slab and is facing the camera
+297	296	HOME	the raised card has been turned to show its blank back
+300	299	HOME	the card has been picked up off the wallet
+303	302	HOME	the dotted line has been closed into a solid heavy ring
+306	305	HOME	MARV has laid his other hand flat over the card
+309	308	BANK	a small scrap has been posted through a slot in the shut door
+312	311	BANK	THE SUIT has lowered the enormous shape to the floor
+315	314	HOME	the pen has touched down on the page
+318	317	HOME	the notebook has been closed
+321	320	HOME	MARV has sat back again, arms at his sides
+324	323	HOME	the chair has been moved to the far side of the room
+327	326	CAFE	the terminal screen has gone blank
+330	329	CAFE	the cup has been pushed to the near edge of the counter
+333	332	CAFE	every fixture in the cafe has separated slightly along its outlines
+336	335	CAFE	MARV has raised the cup to just below his chin
+339	338	HOME	the scrap has sunk out of sight beneath the surface
+342	341	HOME	the scrap has been laid down flat beside the mug
+345	344	HOME	the dotted outline has been shaded in to show the difference
+348	347	LEDGER	the short dash has been rubbed out, leaving the plane empty
+351	350	LEDGER	the gap between the two marks has widened, stretching the bracket
+354	353	LEDGER	MARV has dropped his arm and is looking straight at the camera

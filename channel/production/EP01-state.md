@@ -25,13 +25,15 @@ KIND-B prompts carry neither — they use only the edit sentence in §RESUME.
 
 # RESUME HERE
 
-**Wave A is COMPLETE — all 119 KIND-A frames are in `EP01-frame-ledger.tsv`.**
+**Waves A and B1 are COMPLETE — 239 frames in `EP01-frame-ledger.tsv`**
+(119 A + 119 B1 + frame 3 from the B pilot). Verified: no gaps, no duplicate frame
+numbers, no duplicate job ids.
 
-**Next action: wave B1** — every frame where `(n-1)%3==1`, each editing its own `n-1`.
-Frames 2 and 5 … 356: 118 remain (frame 2 is already done). Look up the predecessor's
-job id in the ledger, pass it as the ONE and ONLY `medias` entry, submit 8 per
-`generate_image_batch`, wait, append the returned ids to the ledger as kind `B1`, repeat.
-Then wave B2 (`(n-1)%3==2`, editing `n-1`, 117 remain — frame 3 is already done).
+**Next action: wave B2** — every frame where `(n-1)%3==2`, each editing its own `n-1`
+(a B1 frame). Frames 3 and 6 … 354: **117 remain**, all authored in
+`EP01-waveB2-changes.tsv`. Look up the predecessor's job id in the ledger, pass it as
+the ONE and ONLY `medias` entry, submit 8 per `generate_image_batch`, wait, append the
+returned ids to the ledger as kind `B2`, repeat. That closes the frame set at 356.
 
 **KIND-A prompt shape** (`seedream_v5_pro`, `aspect_ratio:"16:9"`, `resolution:"1k"`,
 `medias` = location → characters → props, all role `image_references`):
@@ -58,6 +60,14 @@ and confirm the mechanism works — match their wording.
 
 Each KIND-B change must be **visible at a glance**: an arm moves, the head turns, an
 object enters or leaves. A raised eyebrow is invisible in one second of screen time.
+
+**Never ask a KIND-B change for a written number, word or label.** The style formula
+forbids text, and an edit that names one gets it rendered into the frame. Say "a second
+group of tally marks has been circled", not "the number has gone up".
+
+The change plans are authored ahead of submission and committed:
+`EP01-waveB1-changes.tsv` (done) and `EP01-waveB2-changes.tsv` (pending). Both key each
+frame to its base and carry the one visible change, so a batch is mechanical to build.
 
 ## DONE
 
@@ -134,6 +144,11 @@ props, or the model rebuilds the scene instead of editing it.
 
 Name each `frameNNN.png` by **timeline number in spoken order**, never finish order.
 
+The scene map below is nominal. Several of its boundaries (116, 128, 218 …) fall on B
+frames, and a B frame cannot change location — it edits its predecessor. **The scene
+actually turns at the next A frame.** Take a B frame's location from its base, not the
+map.
+
 ### Scene map — 42 scenes, frame ranges
 
 `1-12 CAFE · 13-16 LEDGER · 17-25 CAFE · 26-32 LEDGER · 33-41 RAILS · 42-47 RAILS ·
@@ -174,10 +189,26 @@ Render latency drifted from ~45s to ~4min per batch of 8 over the run; batches s
 `queued`/`in_progress` far longer than the 15s `jobs_wait` ceiling, so wait with a
 background `sleep` (~200s) between polls rather than looping `jobs_wait`.
 
+### Wave B1 progress — DONE
+
+All **119 KIND-B1 frames** rendered and recorded. 118 submitted this session in 15
+batches of ≤8, zero failures and zero retries, **1.5 credits per frame** at
+`resolution:"1k"` (balance 735.3 → 558.3 for 118 frames). Render latency held at
+~2-4 min per batch of 8, with one or two stragglers per batch finishing a minute
+after the rest — poll the stragglers separately rather than re-waiting the whole group.
+
+Base beats for A frames 4-94 were never persisted, and **the asset CDN
+(`d8j0ntlcm91z4.cloudfront.net`) is blocked by the session egress policy**, so those
+frames could not be viewed before authoring their edits. They were authored instead
+against a narration-to-frame mapping (word position × 356 frames), which reproduces the
+known beats correctly where they exist — frame 97's beat lands exactly on the cashback
+line. Those 31 changes are phrased additively so a missing element gets introduced
+rather than contradicted. **Spot-check frames 5-95 during the assembly read-through.**
+
 ## REMAINING
 
-1. **Frames** — 235 KIND-B edits (118 in wave B1, 117 in wave B2). Append every job id to
-   `EP01-frame-ledger.tsv` as it completes.
+1. **Frames** — 117 KIND-B2 edits, all authored in `EP01-waveB2-changes.tsv`. Append
+   every job id to `EP01-frame-ledger.tsv` as it completes.
 2. **Assemble** — in `sandbox_exec`: re-download the 4 narration chunks, concat to
    `narration.wav`, re-run Whisper, regroup to the same 356 segments, download every frame
    from the ledger as `frameNNN.png` **by ledger number, never by job finish order**, then
@@ -198,7 +229,9 @@ background `sleep` (~200s) between polls rather than looping `jobs_wait`.
 | `seed_audio` per chunk | ~0.1 |
 | `gemini_omni` 10s block | 30 |
 
-Spent so far: **~420** (two style keys, 34 assets across two palette passes, 4 narration
+Spent so far: **~597** (two style keys, 34 assets across two palette passes, 4 narration
+chunks, 239 frames). Balance **558.3** measured after wave B1. The 117 remaining B2
+frames cost ~176 at 1k, leaving ~382 of headroom for retries and the upscale.
 chunks, 121 frames). Balance **741.3** measured after wave A. The 235 remaining KIND-B
 frames cost ~353 at 1k, leaving ~390 of headroom for retries and the upscale.
 
