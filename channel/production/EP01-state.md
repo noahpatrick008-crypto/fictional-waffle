@@ -29,7 +29,9 @@ KIND-B prompts carry neither — they use only the edit sentence in §RESUME.
 119 A + 119 B1 + 118 B2, covering 1..356 with no gaps, no duplicate frame numbers, no
 duplicate job ids, and every row's kind matching the `(n-1)%3` pattern.
 
-**Next action: assembly** — step 2 under §REMAINING. Nothing further to generate.
+**Next action: assembly** — but it is BLOCKED on infrastructure, not on the work.
+See §ASSEMBLY. The 356-frame timeline is derived, verified and committed; what is
+missing is somewhere that can hold 595MB and run ffmpeg for more than 60 seconds.
 
 **KIND-A prompt shape** (`seedream_v5_pro`, `aspect_ratio:"16:9"`, `resolution:"1k"`,
 `medias` = location → characters → props, all role `image_references`):
@@ -210,6 +212,44 @@ the frame set at 356.
 Across both B waves, 235 frames were generated back to back with **no failed job and no
 resubmission** — the edit prompt shape in §RESUME is stable at this batch size. The Plus
 concurrency cap never bit because submissions stayed at 8 in flight.
+
+## ASSEMBLY — BLOCKED, and why (measured 2026-08-10)
+
+The timeline is DONE and committed (`EP01-frames-manifest.txt`): 356 `<url> <seconds>`
+pairs, durations summing to 376.861s. What is blocked is the render itself. Both routes
+were tried and measured, so do not re-derive this:
+
+**Route A — the Higgsfield sandbox. Blocked by its execution limits.**
+
+| limit | measured |
+|---|---|
+| wall clock per call | **~60s** — the MCP client times out at 60s no matter what `timeout_seconds` says (the tool advertises max 120) |
+| persistence between calls | **none** — wrote `marker.txt`, gone on the very next call; `/home/user/work` vanished every time |
+| `background:true` | **fails at the transport layer**, 4 attempts, `deadline_exceeded` |
+| CPUs | 2 |
+
+The job needs ~595MB of frames (1.67MB x 356, ~15MB/s single-stream) plus an ffmpeg
+encode of a 6:17 video on 2 cores. That does not fit in 60s, and with no persistence it
+cannot be split across calls — each call would re-download from zero with nowhere to
+accumulate. `finish_video.sh` is written to be idempotent for exactly this reason, but
+idempotence does not help when the filesystem is empty every time.
+
+**Route B — assemble locally instead. Blocked by egress policy.**
+
+`d8j0ntlcm91z4.cloudfront.net` (the asset CDN) returns **403 on CONNECT** through this
+session's agent proxy — an organisation egress denial, not a TLS or tooling fault, so it
+must not be routed around. Local disk (30GB) and tooling are otherwise fine; there is no
+local ffmpeg but `pip install imageio-ffmpeg` would supply one, since PyPI is exempt
+from the proxy.
+
+**To unblock, one of:**
+1. Allow `d8j0ntlcm91z4.cloudfront.net` for this session, then assembly runs locally with
+   no 60s ceiling — this is the smallest change and the whole manifest is ready for it.
+2. Run the assembly where the sandbox keeps a filesystem between calls, or raise the
+   per-call ceiling above ~5 minutes.
+3. Hand `EP01-frames-manifest.txt` plus the narration chunk ids to any machine that can
+   reach the CDN and run `finish_video.sh --stills --frames-file … --narration …
+   --blocks 356`.
 
 ## REMAINING
 
